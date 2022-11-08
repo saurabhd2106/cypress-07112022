@@ -1,8 +1,18 @@
 /// <reference types='cypress' />
 
 import {stringify} from "querystring"
+import { loginApi } from "../../conduitApis/loginAPI"
 
 describe("API Testing", function(){
+
+    beforeEach(function(){
+
+        cy.fixture("users").then(function(users) {
+            this.users = users
+        })
+
+
+    })
 
 
     it("Get Tags API", function(){
@@ -48,6 +58,18 @@ describe("API Testing", function(){
             access_token = response.status.user.token
             
             cy.log(access_token)
+        })
+    })
+
+    it("Login via api", function(){
+
+        let access_token;
+
+        loginApi.loginToApplication(this.users.username, this.users.userPassword).then(function(response){
+
+            expect(response.status).to.be.equal(200)
+
+            access_token = response.body.user.token;
         })
     })
 })
