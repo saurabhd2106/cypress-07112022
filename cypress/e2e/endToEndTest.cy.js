@@ -5,13 +5,13 @@ import { articlePage } from "../pages/articlesPage";
 
 describe("Add Article", function () {
 
-    let response;
+    let res;
 
-    this.beforeEach(function () {
+    beforeEach(function () {
 
         loginApi.loginToApplication("saurabh@fake.com", "fake").then(function (response) {
 
-            this.response = response;
+            res = response;
 
         })
 
@@ -19,7 +19,7 @@ describe("Add Article", function () {
 
         cy.visit("/", {
             onBeforeLoad(win) {
-                win.localStorage.setItem("user", JSON.stringify(this.response.body.user))
+                win.localStorage.setItem("user", JSON.stringify(res.body.user))
             }
         })
 
