@@ -17,7 +17,7 @@ export class LoginAPI {
             "Accept" : "application/json"
         }
 
-       return restClient.sendPostRequest(loginApiEndpointUrl, loginApiEndpointUrl, body)
+       return restClient.sendPostRequest(this.loginApiEndpointUrl, requestHeaader, body)
 
 
     }
