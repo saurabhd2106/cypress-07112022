@@ -1,5 +1,8 @@
 /// <reference types='cypress' />
 
+import { articlePage } from "../../pages/articlesPage"
+import {loginApi} from "../../conduitApis/loginAPI"
+
 describe("Intercept Network calls ", function () {
 
 
@@ -13,10 +16,7 @@ describe("Intercept Network calls ", function () {
 
         },
             {
-                statusCode: 201,
-                body: {
-                    tags: ["Cypress", "BDD", "API Automation"]
-                }
+               fixture: "tags_response.json"
             }
 
         ).as("tagsApi")
@@ -34,6 +34,41 @@ describe("Intercept Network calls ", function () {
             expect(xhr.response.body.tags).to.contain("API Automation")
         })
 
+
+
+    })
+
+    it("Add Article", function () {
+
+        let res
+
+        cy.intercept({
+            method: "POST",
+            url: "**/api/articles"
+        }, function (req) {
+            req.body.article.title = "Article title updated via API"
+        }).as("productApi")
+
+        loginApi.loginToApplication("saurabh@fake.com", "fake").then(function (response) {
+
+            res = response;
+
+        })
+
+
+        cy.visit("/", {
+            onBeforeLoad(win) {
+                win.localStorage.setItem("user", JSON.stringify(res.body.user))
+            }
+        })
+
+        articlePage.navigateToArticlePage()
+
+        articlePage.addArticle("Cypress Test Automation", "Cypress", "Test Automation va cypress", "Cypress")
+
+        cy.wait("@productApi").then(function(xhr){
+            expect(xhr.response.body.article.title).to.contain("Article title updated via API")
+        })
 
 
     })

@@ -1,5 +1,6 @@
 const { defineConfig } = require("cypress");
 
+
 module.exports = defineConfig({
   e2e: {
 
@@ -12,7 +13,8 @@ module.exports = defineConfig({
     viewportWidth: 1366,
     screenshotsFolder: "cypress/screenshots",
     video: true,
-    videosFolder: "cypress/videos"
+    videosFolder: "cypress/videos",
+    specPattern: "**/e2e/**/*.{feature,features,js}"
 
   },
 });
